@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.swp
+*.swo
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.DS_Store
+
+# Coverage reports
+coverage/
+
+# Process files
+.pids/
+*.pid
+
+# Misc
+debug/
+thumbs.db
