@@ -4,6 +4,7 @@ const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
 const getDeviceInfo = require("../utils/getDeviceInfo");
 const userActivity = require("../models/userActivity");
+const messages = require("../messages/en");
 
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -21,11 +22,13 @@ exports.signin = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res
+        .status(401)
+        .json({ message: messages.auth.invalidCredentials });
     }
 
     const device = getDeviceInfo(req.headers["user-agent"] || "");
-    await UserActivity.create({
+    await userActivity.create({
       userId: user._id,
       action: "Login",
       ip: req.ip,
@@ -35,7 +38,7 @@ exports.signin = async (req, res) => {
 
     const token = generateToken(user._id);
     res.status(200).json({
-      message: "Login successful",
+      message: messages.auth.loginSuccess,
       token,
       user: {
         id: user._id,
@@ -52,7 +55,7 @@ exports.signin = async (req, res) => {
 
 exports.forgotPassword = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(404).json({ message: "User not found" });
+  if (!user) return res.status(404).json({ message: messages?.user?.notFound });
 
   const resetToken = user.getResetPasswordToken();
   await user.save();
