@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
+const { v4: uuidv4 } = require("uuid");
+const requestId = require("./utils/requestId");
+const responseTime = require("response-time");
 const authRoutes = require("./routes/authRoutes");
 const paymentRoutes = require("./routes/paymentRoutes");
 const logger = require("./config/logger");
@@ -17,6 +20,16 @@ app.use(loggerMiddleware);
 app.use("/api/auth", authRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use(errorMiddleware);
+app.use(requestId);
+app.use(
+  responseTime((req, res, time) => {
+    logger.info({
+      reqId: req.id,
+      url: req.originalUrl,
+      responseTime: `${time.toFixed(2)}ms`,
+    });
+  })
+);
 
 mongoose
   .connect(process.env.MONGO_URI)

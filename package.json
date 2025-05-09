@@ -23,9 +23,11 @@
     "mongoose": "^8.14.1",
     "morgan": "^1.10.0",
     "nodemailer": "^7.0.3",
+    "response-time": "^2.3.3",
     "ssl-commerz-node": "^1.0.4",
     "sslcommerz-lts": "^1.1.0",
     "ua-parser-js": "^2.0.3",
+    "uuid": "^11.1.0",
     "winston": "^3.17.0"
   }
 }

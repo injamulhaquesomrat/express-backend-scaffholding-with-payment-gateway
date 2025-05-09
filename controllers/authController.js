@@ -2,6 +2,8 @@ const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
 const sendEmail = require("../utils/sendEmail");
 const crypto = require("crypto");
+const getDeviceInfo = require("../utils/getDeviceInfo");
+const userActivity = require("../models/userActivity");
 
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
@@ -19,12 +21,32 @@ exports.signin = async (req, res) => {
   try {
     const user = await User.findOne({ email });
     if (!user || !(await user.comparePassword(password))) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid email or password" });
     }
+
+    const device = getDeviceInfo(req.headers["user-agent"] || "");
+    await UserActivity.create({
+      userId: user._id,
+      action: "Login",
+      ip: req.ip,
+      userAgent: req.headers["user-agent"],
+      device,
+    });
+
     const token = generateToken(user._id);
-    res.json({ token });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error("Signin error:", err);
+    res.status(500).json({ message: "Server error, please try again later." });
   }
 };
 
