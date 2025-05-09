@@ -1,26 +1,28 @@
-require("dotenv").config();
-const cors = require("cors");
-
-const connectDB = require("./config/db");
 const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const morgan = require("morgan");
+const authRoutes = require("./routes/authRoutes");
+const paymentRoutes = require("./routes/paymentRoutes");
+const logger = require("./config/logger");
+const loggerMiddleware = require("./middlewares/loggerMiiddleware");
+const errorMiddleware = require("./middlewares/errorMiddleware");
 
-const authRoutes = require("./routes/auth");
-const paymentRoutes = require("./routes/payment");
-
+dotenv.config();
 const app = express();
-connectDB();
 
-app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(morgan("combined", { stream: logger.stream }));
+app.use(loggerMiddleware);
+app.use("/api/auth", authRoutes);
+app.use("/api/payment", paymentRoutes);
+app.use(errorMiddleware);
 
-app.get("/", (req, res) => {
-  res.send("Express Backend Running...");
-});
-
-app.use("/auth", authRoutes);
-
-app.use("/payment", paymentRoutes);
-
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(process.env.PORT || 5000, () =>
+      console.log(`Server running on port: ${process.env.PORT || 5000}`)
+    );
+  })
+  .catch((err) => console.error(err));
