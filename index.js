@@ -1,3 +1,25 @@
+/**
+ * @fileoverview Entry point for the Express backend application.
+ * Configures middleware, routes, and database connection.
+ * Includes logging, error handling, and response time tracking.
+ *
+ * @requires express - Fast, unopinionated, minimalist web framework for Node.js.
+ * @requires mongoose - MongoDB object modeling tool designed to work in an asynchronous environment.
+ * @requires cors - Middleware to enable Cross-Origin Resource Sharing.
+ * @requires dotenv - Loads environment variables from a .env file into process.env.
+ * @requires morgan - HTTP request logger middleware for Node.js.
+ * @requires uuid - Library to generate unique identifiers.
+ * @requires response-time - Middleware to record response time for HTTP requests.
+ * @requires ./utils/requestId - Custom middleware to attach a unique request ID to each request.
+ * @requires ./routes/authRoutes - Routes for authentication-related operations.
+ * @requires ./routes/paymentRoutes - Routes for payment-related operations.
+ * @requires ./config/logger - Custom logger configuration.
+ * @requires ./middlewares/loggerMiiddleware - Middleware for logging request details.
+ * @requires ./middlewares/errorMiddleware - Middleware for handling errors.
+ *
+ * @module index
+ */
+
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -18,7 +40,7 @@ const app = express();
 app.use(
   cors({
     origin: "http://localhost:5173",
-    credentials: true, // if you're using cookies or authorization headers
+    credentials: true,
   })
 );
 

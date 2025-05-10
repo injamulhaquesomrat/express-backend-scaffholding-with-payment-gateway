@@ -6,6 +6,19 @@ const getDeviceInfo = require("../utils/getDeviceInfo");
 const userActivity = require("../models/userActivity");
 const messages = require("../messages/en");
 
+/**
+ * Handles user signup by creating a new user and generating a token.
+ *
+ * @async
+ * @function signup
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - The request body containing user details.
+ * @param {string} req.body.name - The name of the user.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} res - Express response object.
+ * @returns {void} Sends a JSON response with the generated token or an error message.
+ */
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -20,6 +33,20 @@ exports.signup = async (req, res) => {
   }
 };
 
+/**
+ * Handles user signin by authenticating the user and generating a token.
+ *
+ * @async
+ * @function signin
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - The request body containing login credentials.
+ * @param {string} req.body.email - The email of the user.
+ * @param {string} req.body.password - The password of the user.
+ * @param {Object} req.headers - The request headers.
+ * @param {string} [req.headers.user-agent] - The user-agent string of the client.
+ * @param {Object} res - Express response object.
+ * @returns {void} Sends a JSON response with the token, user details, or an error message.
+ */
 exports.signin = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -56,6 +83,19 @@ exports.signin = async (req, res) => {
   }
 };
 
+/**
+ * Handles the forgot password functionality by generating a reset token
+ * and sending a password reset email to the user.
+ *
+ * @async
+ * @function forgotPassword
+ * @param {Object} req - Express request object.
+ * @param {Object} req.body - The request body containing the user's email.
+ * @param {string} req.body.email - The email of the user requesting password reset.
+ * @param {Object} res - Express response object.
+ * @param {Function} next - Express next middleware function.
+ * @returns {void} Sends a JSON response indicating success or failure of the email sending process.
+ */
 exports.forgotPassword = async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) return res.status(404).json({ message: messages?.user?.notFound });

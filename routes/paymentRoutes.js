@@ -1,3 +1,14 @@
+/**
+ * @fileoverview Defines the routes for handling payment-related operations.
+ *
+ * This file sets up the Express router for payment-related endpoints,
+ * including initiating a payment, handling payment success, failure,
+ * and cancellation. The corresponding controller functions are imported
+ * from the paymentController module.
+ *
+ * @module routes/paymentRoutes
+ */
+
 const express = require("express");
 const {
   initiatePayment,

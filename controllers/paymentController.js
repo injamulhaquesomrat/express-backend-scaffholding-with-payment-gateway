@@ -1,9 +1,48 @@
 const SSLCommerzPayment = require("sslcommerz-lts");
 
+/**
+ * Initiates a payment request using SSLCommerz.
+ *
+ * @async
+ * @function initiatePayment
+ * @param {Object} req - The request object.
+ * @param {Object} req.body - The request body containing payment details.
+ * @param {number} req.body.amount - The total amount to be paid.
+ * @param {string} req.body.currency - The currency of the payment (e.g., "BDT", "USD").
+ * @param {string} req.body.customerEmail - The email address of the customer.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} Sends a JSON response with the payment gateway URL or an error message.
+ */
+
+/**
+ * Handles the success callback for a payment.
+ *
+ * @function paymentSuccess
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a success message to the client.
+ */
+
+/**
+ * Handles the failure callback for a payment.
+ *
+ * @function paymentFail
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a failure message to the client.
+ */
+
+/**
+ * Handles the cancellation callback for a payment.
+ *
+ * @function paymentCancel
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {void} Sends a cancellation message to the client.
+ */
+
 exports.initiatePayment = async (req, res) => {
   const { amount, currency, customerEmail } = req.body;
-
-  console.log(req.body);
 
   const data = {
     total_amount: amount,
@@ -41,7 +80,6 @@ exports.initiatePayment = async (req, res) => {
     process.env.SSL_STORE_PASSWORD,
     false
   );
-  console.log(await sslcz.init(data));
 
   sslcz
     .init(data)
