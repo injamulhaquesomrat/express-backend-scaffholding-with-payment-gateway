@@ -8,6 +8,9 @@ const messages = require("../messages/en");
 
 exports.signup = async (req, res) => {
   const { name, email, password } = req.body;
+
+  console.log(req.body);
+
   try {
     const user = await User.create({ name, email, password });
     const token = generateToken(user._id);
